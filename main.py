@@ -57,32 +57,51 @@ class LoginWindow(QWidget):
         self.show() #na samym końcu tego co chcemy wyświetlić
 
     def submit(self):
-        login=self.login_line_edit.text()
-        password=self.pass_line_edit.text()
+        login = self.login_line_edit.text()
+        password = self.pass_line_edit.text()
 
         if login and password:
-            if len(login)>5 and len(password)>8:
-                QMessageBox.information(self,"Information", "Login and password saved successsfully")
-                self.data(login,password)
+            if len(login) > 5 and len(password) > 8:
+                encrypted_login = self.encrypt_data(login)
+                encrypted_password = self.encrypt_data(password)
+                self.save_to_csv(encrypted_login, encrypted_password)
+                QMessageBox.information(self, "Information", "Login and password saved successfully")
             else:
-                QMessageBox.warning(self,"Warning", "Login must be longer than 5 characters and password must be longer than 8 characters")
+                QMessageBox.warning(self, "Warning", "Login must be longer than 5 characters and password must be longer than 8 characters")
         else:
-            QMessageBox.warning(self,"Warning", "Login and password cannot be empty")
+            QMessageBox.warning(self, "Warning", "Login and password cannot be empty")
 
+    def encrypt_data(self, data):
+        # Generowanie klucza RSA
+        private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048
+        )
 
-    def data(self, login, password):
-            
-            csv_file="basic_password.csv"
+        # Szyfrowanie danych
+        encrypted_data = private_key.public_key().encrypt(
+            data.encode(),
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
 
-            with open(csv_file, 'a', newline='') as file:
-                fieldnames= ['Login', 'Password']
-                writer= csv.DictWriter(file, fieldnames=fieldnames)
-            
-                if file.tell() == 0:
-                    writer.writeheader() # sprawdzanie czy plik jest pusty
+        # Zwrócenie zaszyfrowanych danych jako base64 string
+        return encrypted_data
 
-                writer.writerow({'Login': login, 'Password': password })
-
+    def save_to_csv(self, encrypted_login, encrypted_password):
+        csv_file = "basic_password.csv"
+        
+        # Tworzymy DataFrame z zaszyfrowanym loginem i hasłem
+        df = pd.DataFrame({
+            'encrypted_login': [encrypted_login.hex()],
+            'encrypted_password': [encrypted_password.hex()]
+        })
+        
+        # Zapisujemy DataFrame do pliku CSV
+        df.to_csv(csv_file, mode='a', header=False, index=False)
 
     def Next(self):
         self.next = QPushButton("Next", self)
