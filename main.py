@@ -5,7 +5,13 @@ from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QPushButton, QMessage
 import os
 import random
 import pandas as pd
+import sys
 
+
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.backends import default_backend
 
 class LoginWindow(QWidget):
     def __init__(self):
@@ -601,21 +607,29 @@ class NewWindow(QWidget):
         button.move(100,90)
 
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
 
     def closeEvent(self, event:QCloseEvent):
@@ -667,21 +681,29 @@ class NewWindow_2(QWidget):
         button.move(100,90)
 
     
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -731,21 +753,28 @@ class NewWindow_3(QWidget):
         button.move(100,90)
 
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
 
 
     def closeEvent(self, event:QCloseEvent):
@@ -796,22 +825,30 @@ class NewWindow_4(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
 
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
+    
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
                                             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -859,21 +896,29 @@ class NewWindow_5(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -922,21 +967,29 @@ class NewWindow_6(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -984,21 +1037,29 @@ class NewWindow_7(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1047,21 +1108,29 @@ class NewWindow_8(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1111,21 +1180,29 @@ class NewWindow_9(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1174,21 +1251,29 @@ class NewWindow_10(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1238,21 +1323,29 @@ class NewWindow_11(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1301,21 +1394,29 @@ class NewWindow_12(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
 
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1363,21 +1464,30 @@ class NewWindow_13(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
     
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1426,21 +1536,29 @@ class NewWindow_14(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
     
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1489,21 +1607,29 @@ class NewWindow_15(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
     
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1552,21 +1678,29 @@ class NewWindow_16(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
     
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1615,21 +1749,29 @@ class NewWindow_17(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
     
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1678,21 +1820,29 @@ class NewWindow_18(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
     
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
-
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
+
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1740,22 +1890,29 @@ class NewWindow_19(QWidget):
         button= QPushButton(str(random.randint(100000,999999)), self)
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
-    
-    def save_to_code(self):
-        csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
 
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+    def save_to_code(self, encrypted_message):
+        csv_file = "code.csv"
+
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1804,21 +1961,28 @@ class NewWindow_20(QWidget):
         button.clicked.connect(self.button_clicked)
         button.move(100,90)
     
-    def save_to_code(self):
+    def save_to_code(self, encrypted_message):
         csv_file = "code.csv"
-        button_text = self.button_text  # Pobierz tekst przycisku
 
-        # Tworzymy DataFrame z pojedynczym wierszem
-        df = pd.DataFrame({'button_text': [button_text]})
+        # Tworzymy DataFrame z zaszyfrowaną wiadomością
+        df = pd.DataFrame({'encrypted_message': [encrypted_message.hex()]})
 
         # Zapisujemy DataFrame do pliku CSV
         df.to_csv(csv_file, mode='a', header=False, index=False)
+        
 
     def button_clicked(self):
         sender = self.sender()
-        self.button_text = sender.text()
-        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {self.button_text}")
-        self.save_to_code()
+        plaintext_message = sender.text()
+
+        # Szyfrowanie
+        encryption = SymmetricEncryption()
+        encrypted_message = encryption.encrypt(plaintext_message)
+        
+        # Zapis do pliku CSV
+        self.save_to_code(encrypted_message)
+
+        QMessageBox.information(self, "Button Clicked", f"Clicked button with text: {plaintext_message}")
 
     def closeEvent(self, event:QCloseEvent):
         should_close= QMessageBox.question(self,"Close App", "Do you want to close",
@@ -1840,13 +2004,56 @@ class csv(NewWindow, NewWindow_2, NewWindow_3, NewWindow_4, NewWindow_5, NewWind
     def csv(self):
         self.button
 
+class SymmetricEncryption:
+    def __init__(self):
+        self.private_key = None
+        self.public_key = None
+        self.generate_key_pair()
+
+    def generate_key_pair(self):
+        """
+        Generates RSA key pair (public and private keys).
+        """
+        self.private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048,
+            backend=default_backend()
+        )
+        self.public_key = self.private_key.public_key()
+
+    def encrypt(self, plaintext):
+        """
+        Encrypts data using RSA public key.
+        Returns encrypted ciphertext.
+        """
+        ciphertext = self.public_key.encrypt(
+            plaintext.encode(),
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+        return ciphertext
+
+    def decrypt(self, ciphertext):
+        """
+        Decrypts encrypted data using RSA private key.
+        Returns original plaintext.
+        """
+        plaintext = self.private_key.decrypt(
+            ciphertext,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+        return plaintext.decode()
 
 if __name__ == "__main__":
 
-    app = QApplication([])
-
+    app = QApplication(sys.argv)
     login_window = LoginWindow()
-
-    app.exec() 
-
-
+    login_window.show()
+    sys.exit(app.exec_())
